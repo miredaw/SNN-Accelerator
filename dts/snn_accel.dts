@@ -1,0 +1,28 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    fragment@0 {
+        target = <&fpga_full>;
+        __overlay__ {
+            #address-cells = <1>;
+            #size-cells = <1>;
+
+            axi_dma_0: dma@40000000 {
+                compatible = "xlnx,axi-dma-1.00.a";
+                reg = <0x40000000 0x10000>;
+                /* IRQ numbers depend on your Zynq wiring; check /proc/interrupts */
+                interrupts = <0 29 4>, <0 30 4>;
+                interrupt-parent = <&intc>;
+                xlnx,include-sg = <0>;       /* simple mode */
+                xlnx,sg-length-width = <23>;
+                xlnx,num-queues = <1>;
+            };
+
+            snn_csr: csr@43000000 {
+                compatible = "snn,aer-csr-1.0";
+                reg = <0x43000000 0x10000>;
+            };
+        };
+    };
+};
